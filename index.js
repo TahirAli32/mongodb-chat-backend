@@ -1,16 +1,16 @@
 const express = require('express')
 const cors = require('cors')
-// const bodyParser = require('body-parser')
-const PORT = process.env.PORT || 3001
-require('dotenv').config()
-
+const dotenv = require('dotenv')
+const PORT = process.env.PORT || 4000
 const app = express()
+const mongoose = require('mongoose')
+
+dotenv.config()
+
+mongoose.connect(process.env.MONGODB_URI)
 
 app.use(express.json())
-// app.use(bodyParser.json())
 app.use(cors())
-
-app.use('/media', express.static('temp'))
 
 // Root
 app.get('/', (req,res) => {
@@ -18,12 +18,12 @@ app.get('/', (req,res) => {
 })
 
 // Authentication Route
-app.use('/auth', require('./routes/auth'))
+app.use('/api/auth', require('./routes/auth'))
 
 // Chat Route
-app.use('/chat', require('./routes/chat'))
+app.use('/api/chat', require('./routes/chat'))
 
 app.listen(PORT, ()=> {
   if(process.env.NODE_ENV !== 'production')
-    console.log(`Server running on http://localhost:${PORT}`)
+    console.log('Server running on http://localhost:'+PORT)
 })

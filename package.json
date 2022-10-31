@@ -4,18 +4,24 @@
   "description": "Chat App Backend",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "Muhammad Tahir Ali",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.27.2",
+    "bcryptjs": "^2.4.3",
+    "cookie": "^0.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.1",
-    "mongoose": "^6.6.3",
+    "express": "^4.18.2",
+    "joi": "^17.6.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.7.0",
+    "session-keystore": "^1.0.3",
+    "socket.io": "^4.5.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
