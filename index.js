@@ -10,7 +10,11 @@ dotenv.config()
 mongoose.connect(process.env.MONGODB_URI)
 
 app.use(express.json())
-app.use(cors())
+
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}))
 
 // Root
 app.get('/', (req,res) => {

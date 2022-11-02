@@ -76,4 +76,30 @@ router.post('/login', async (req, res) => {
 	res.status(200).send({success: `Login Successful. User ID is ${user._id}`, serialised})
 })
 
+router.post('/validatetoken', async (req, res) => {
+	// Destructutring Token for Body
+	const { authToken } = req.body
+
+	// Verify Token
+	jwt.verify(authToken, 'mytokensecret32', async (err, decoded) => {
+		if(err){
+			res.send({ error: 'Token is incorrect'})
+			return
+		}
+		else{
+			const user = await User.findById({ _id: decoded._id })
+			if (!user) return res.send({ error: 'Token is Tempered' })
+			// const serialised = serialize("done", true, {
+			// 	httpOnly: false,
+			// 	secure: process.env.NODE_ENV !== "development",
+			// 	sameSite: "strict",
+			// 	maxAge: 60 * 10,
+			// 	path: "/"
+			// })
+			// res.setHeader('Set-Cookie', serialised)
+			res.send({ success: { id: user._id, name: user.name} })
+		}
+	})
+})
+
 module.exports = router
