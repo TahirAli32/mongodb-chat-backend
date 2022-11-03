@@ -24,8 +24,11 @@ app.get('/', (req,res) => {
 // Authentication Route
 app.use('/api/auth', require('./routes/auth'))
 
-// Chat Route
-app.use('/api/chat', require('./routes/chat'))
+// Conversation Route
+app.use('/api/conversation', require('./routes/conversation'))
+
+// Messages Route
+app.use('/api/messages', require('./routes/messages'))
 
 app.listen(PORT, ()=> {
   if(process.env.NODE_ENV !== 'production')
