@@ -1,9 +1,9 @@
 const { Router } = require('express')
-const { v4:uuidv4 } = require('uuid')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { serialize } = require('cookie')
 const User = require('../models/User')
+const Conversation = require('../models/Conversation')
 const { loginValidation, registerValidation } = require('../middleware/authValidation')
 
 const router = Router()
@@ -27,9 +27,17 @@ router.post('/signup', async (req, res) => {
 		email: req.body.email,
 		password: hashedPassword,
 	})
+
+
 	try {
 		// Save user to DB
 		await user.save()
+
+		// Creating Document with User's ID
+		Conversation.create({
+			userChat: user._id,
+		})
+
 		res.send({ success: `User saved Successfully. Id is ${user._id}` })
 	} catch (error) {
 		res.send({ error })
