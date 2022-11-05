@@ -6,7 +6,7 @@ const Chat = require('../models/Chat')
 // Send Message
 router.post('/', async (req, res) => {
 
-	const combinedID = req.body.senderID > req.body.friendID ? req.body.senderID + req.body.friendID : req.body.friendID + req.body.senderID
+	// const chatID = req.body.senderID > req.body.friendID ? req.body.senderID + req.body.friendID : req.body.friendID + req.body.senderID
 
 	const messageData = {
 		senderID: req.body.senderID,
@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
 	}
 
 	try{
-		await Chat.findOneAndUpdate({chatID: combinedID}, { $push: { messages: messageData } })
+		await Chat.findOneAndUpdate({chatID: req.body.chatID}, { $push: { messages: messageData } })
 		res.send({success: "Message Sent Successfully"})
 	}catch(error){
 		res.send({error})
@@ -22,12 +22,12 @@ router.post('/', async (req, res) => {
 })
 
 // Get Message of User
-router.get('/:conversationID', async (req, res) => {
+router.get('/:chatID', async (req, res) => {
 	try {
 		const messages = await Chat.find({
-			conversationID: req.params.conversationID
+			conversationID: req.params.chatID
 		})
-		res.send({messages})
+		res.send(messages)
 	} catch (error) {
 		res.send({error})
 	}
