@@ -2,17 +2,17 @@ const express = require('express')
 const router = express.Router()
 const Conversation = require('../models/Conversation')
 const Chat = require('../models/Chat')
-// const { v4: uuidv4 } = require('uuid')
 
 // New Conversation
 router.post('/', async (req, res) => {
-	const combinedID = req.body.currentUserID > req.body.friendID ? req.body.currentUserID + req.body.friendID : req.body.friendID + req.body.currentUserID
 
+	const combinedID = req.body.currentUserID > req.body.friendID ? req.body.currentUserID + req.body.friendID : req.body.friendID + req.body.currentUserID
 	try{
 		const conversation = await Conversation.find({
 			userChat: req.body.currentUserID,
 			friendsID: { $in: [req.body.friendID] }
 		})
+
 		if(conversation.length) return res.send('old conversation')
 		
 		await Conversation.findOneAndUpdate({userChat: req.body.currentUserID}, { $push: { friendsID: req.body.friendID } })
@@ -22,7 +22,6 @@ router.post('/', async (req, res) => {
 		Chat.create({
 			chatID: combinedID,
 		})
-
 		res.send('new conversation')
 	}
 	catch(error){
