@@ -4,6 +4,8 @@ const dotenv = require('dotenv')
 const PORT = process.env.PORT || 4000
 const app = express()
 const mongoose = require('mongoose')
+const { createServer } = require('http')
+const { Server } = require('socket.io')
 
 dotenv.config()
 
@@ -11,12 +13,32 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.use(express.json())
 
+const server = createServer(app)
+
+const io = new Server(server, {
+  cors:{
+    origin: process.env.CORS_AND_SOCKET_ORIGIN
+  }
+})
+
+io.on("connection", socket => {
+  // console.log(`User connected ${socket.id}`)
+  
+  socket.on('openChat', (chatID) => {
+    socket.join(chatID)
+  })
+
+  socket.on("sendMessage", (data)=>{
+    socket.to(data.chatID).emit("receiveMessage")
+  })
+})
+
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: process.env.CORS_AND_SOCKET_ORIGIN,
   credentials: true,
 }))
 
-// Root
+// Root Route, not used in API
 app.get('/', (req,res) => {
   res.json({success: "Success"})
 })
@@ -36,7 +58,7 @@ app.use('/api/chat', require('./routes/chat'))
 // Admin Route
 app.use('/api/admin', require('./routes/admin'))
 
-app.listen(PORT, ()=> {
+server.listen(PORT, ()=> {
   if(process.env.NODE_ENV !== 'production')
     console.log('Server running on http://localhost:'+PORT)
 })
