@@ -22,14 +22,11 @@ const io = new Server(server, {
 })
 
 io.on("connection", socket => {
-  // console.log(`User connected ${socket.id}`)
-  
   socket.on('openChat', (chatID) => {
     socket.join(chatID)
   })
-
   socket.on("sendMessage", (data)=>{
-    socket.to(data.chatID).emit("receiveMessage")
+    socket.to(data.chatID).emit("receiveMessage", data.socketData)
   })
 })
 
