@@ -32,12 +32,13 @@ io.on("connection", socket => {
 
 app.use(cors({
   origin: process.env.CORS_AND_SOCKET_ORIGIN,
+  methods: ['GET', 'POST'],
   credentials: true,
 }))
 
 // Root Route, not used in API
 app.get('/', (req,res) => {
-  res.json({success: "Success"})
+  res.json({success: "Success", origin: process.env.CORS_AND_SOCKET_ORIGIN })
 })
 
 // Authentication Route
