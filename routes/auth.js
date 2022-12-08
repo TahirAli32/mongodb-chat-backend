@@ -76,7 +76,8 @@ router.post('/login', async (req, res) => {
 	const serialised = serialize("authToken", token, {
 		httpOnly: false,
 		secure: process.env.NODE_ENV !== "development",
-		sameSite: "strict",
+		// sameSite: "strict",
+		sameSite: "none",
 		maxAge: tokenAge,
 		path: "/"
 	})
