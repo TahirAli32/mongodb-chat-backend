@@ -32,7 +32,7 @@ io.on("connection", socket => {
 
 app.use(cors({
   // origin: process.env.CORS_AND_SOCKET_ORIGIN,
-  origin: "*",
+  origin: 'http://mongodb-chat-backend.onrender.com',
   methods: ['GET', 'POST'],
   credentials: true,
 }))
