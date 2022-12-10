@@ -23,11 +23,17 @@ const io = new Server(server, {
 })
 
 io.on("connection", socket => {
+  socket.on('userJoin', (userID) => {
+    socket.join(userID.id)
+  })
   socket.on('openChat', (chatID) => {
     socket.join(chatID)
   })
-  socket.on("sendMessage", (data)=>{
+  socket.on("sendMessage", (data) => {
     socket.to(data.chatID).emit("receiveMessage", data.socketData)
+  })
+  socket.on("newConversationSend", (data) => {
+    socket.to(data.userData.id).emit("newConversationReceive", data.currentUser)
   })
 })
 
@@ -38,7 +44,7 @@ app.use(cors({
 
 // Root Route, not used in API
 app.get('/', (req,res) => {
-  res.json({success: "Success", origin: process.env.CORS_AND_SOCKET_ORIGIN })
+  res.json({ success: "Success" })
 })
 
 // Authentication Route

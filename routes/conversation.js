@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
 			friendsID: { $in: [req.body.friendID] }
 		})
 
-		if(conversation.length) return res.send('old conversation')
+		if(conversation.length) return res.send({oldConversation: true})
 		
 		await Conversation.findOneAndUpdate({userChat: req.body.currentUserID}, { $push: { friendsID: req.body.friendID } })
 		await Conversation.findOneAndUpdate({userChat: req.body.friendID}, { $push: { friendsID: req.body.currentUserID } })
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
 		Chat.create({
 			chatID: combinedID,
 		})
-		res.send('new conversation')
+		res.send({oldConversation: false})
 	}
 	catch(error){
 		res.send(error.message)
