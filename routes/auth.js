@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
 		maxAge: tokenAge,
 		// path: "/"
 	})
-	res.setHeader('Set-Cookie', serialised)
+	// res.setHeader('Set-Cookie', serialised)
 	res.status(200).send({success: `Login Successful. User ID is ${user._id}`, serialised})
 })
 
