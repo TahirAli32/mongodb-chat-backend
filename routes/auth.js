@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { serialize } = require('cookie')
+// const { serialize } = require('cookie')
 const User = require('../models/User')
 const Conversation = require('../models/Conversation')
 const { loginValidation, registerValidation } = require('../middleware/authValidation')
@@ -73,6 +73,7 @@ router.post('/login', async (req, res) => {
 	)
 	
 	// Saving Token in Cookies
+	/*
 	const serialised = serialize("authToken", token, {
 		httpOnly: false,
 		secure: process.env.NODE_ENV !== "development",
@@ -81,8 +82,20 @@ router.post('/login', async (req, res) => {
 		maxAge: tokenAge,
 		// path: "/"
 	})
-	// res.setHeader('Set-Cookie', serialised)
+	res.setHeader('Set-Cookie', serialised)
 	res.status(200).send({success: `Login Successful. User ID is ${user._id}`, serialised})
+	*/
+
+	res.status(200).send({
+		success: `Login Successful. User ID is ${user._id}`,
+		token,
+		tokenInfo: {
+			httpOnly: false,
+			secure: true,
+			sameSite: "strict",
+			expires: req.body.rememberMeToken ? 30 : null 
+		}
+	})
 })
 
 router.post('/validatetoken', async (req, res) => {
