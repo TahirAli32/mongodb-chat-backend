@@ -25,9 +25,9 @@ router.post('/signup', async (req, res) => {
 	const user = new User({
 		name: req.body.name,
 		email: req.body.email,
+		profileURL: req.body.profileURL,
 		password: hashedPassword,
 	})
-
 
 	try {
 		// Save user to DB
@@ -119,7 +119,7 @@ router.post('/validatetoken', async (req, res) => {
 			// 	path: "/"
 			// })
 			// res.setHeader('Set-Cookie', serialised)
-			res.send({ success: { id: user._id, name: user.name} })
+			res.send({ success: { id: user._id, name: user.name, profileURL: user.profileURL} })
 		}
 	})
 })
