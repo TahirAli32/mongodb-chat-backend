@@ -31,6 +31,7 @@ io.on("connection", socket => {
   })
   socket.on("sendMessage", (data) => {
     socket.to(data.chatID).emit("receiveMessage", data.socketData)
+    socket.to(data.receiverID).emit("newMessage", {senderID: data.socketData.senderID})
   })
   socket.on("newConversationSend", (data) => {
     socket.to(data.userData.id).emit("newConversationReceive", data.currentUser)
