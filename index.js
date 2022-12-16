@@ -36,6 +36,12 @@ io.on("connection", socket => {
   socket.on("newConversationSend", (data) => {
     socket.to(data.userData.id).emit("newConversationReceive", data.currentUser)
   })
+  socket.on("disconnect", (reason) => {
+    socket.removeAllListeners('userJoin')
+    socket.removeAllListeners('openChat')
+    socket.removeAllListeners('sendMessage')
+    socket.removeAllListeners('newConversationSend')
+  })
 })
 
 app.use(cors({
